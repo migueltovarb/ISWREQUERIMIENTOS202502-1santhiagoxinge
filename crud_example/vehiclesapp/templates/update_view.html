@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Actualizar Vehículo</h1>
+<form method="POST" enctype="multipart/form-data">
+    <!-- Security token -->
+    {% csrf_token %}
+    <!-- Using the formset -->
+    <!-- {{ form.as_p }} -->
+    <div class="form-group">
+        {{ form.placa.label_tag }}
+        {{ form.placa }}
+    </div>
+    <div class="form-group">
+        {{ form.marca.label_tag }}
+        {{ form.marca }}
+    </div>
+    <div class="form-group">
+        {{ form.modelo.label_tag }}
+        {{ form.modelo }}
+    </div>
+    <div class="form-group">
+        {{ form.color_vehiculo.label_tag }}
+        {{ form.color_vehiculo }}
+    </div>
+    <input type="submit" value="Guardar" class="btn btn-primary">
+</form>
+
+
+
+{% endblock %}
