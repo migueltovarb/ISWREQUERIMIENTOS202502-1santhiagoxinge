@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Credenciales{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Lista de Credenciales</h2>
+    
+    <form method="get" style="margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Buscar por código, nombre o documento..." class="form-control" style="flex: 1;">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="{% url 'listar_credenciales' %}" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Fecha Creación</th>
+                <th>Fecha Vencimiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for credencial in credenciales %}
+            <tr>
+                <td><strong>{{ credencial.codigo }}</strong></td>
+                <td>{{ credencial.usuario.get_full_name }}</td>
+                <td>{{ credencial.rol.nombre }}</td>
+                <td>
+                    <span style="color: {% if credencial.estado == 'Activa' %}#4CAF50{% elif credencial.estado == 'Vencida' %}#ff9800{% else %}#f44336{% endif %};">
+                        {{ credencial.estado }}
+                    </span>
+                </td>
+                <td>{{ credencial.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                <td>{{ credencial.fecha_vencimiento|date:"d/m/Y H:i"|default:"Indefinida" }}</td>
+                <td>
+                    <a href="{% url 'modificar_credencial' credencial.id %}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Editar</a>
+                    <a href="{% url 'eliminar_credencial' credencial.id %}" class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center;">No se encontraron credenciales</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if credenciales.has_other_pages %}
+    <div class="pagination">
+        {% if credenciales.has_previous %}
+            <a href="?page={{ credenciales.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Anterior</a>
+        {% endif %}
+        
+        <span class="active">{{ credenciales.number }} de {{ credenciales.paginator.num_pages }}</span>
+        
+        {% if credenciales.has_next %}
+            <a href="?page={{ credenciales.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Siguiente</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

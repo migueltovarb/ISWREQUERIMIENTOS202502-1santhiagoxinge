@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuarios{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Lista de Usuarios</h2>
+    
+    <form method="get" style="margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px;">
+            <input type="text" name="q" value="{{ query }}" placeholder="Buscar por nombre o documento..." class="form-control" style="flex: 1;">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="{% url 'listar_usuarios' %}" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre Completo</th>
+                <th>Documento</th>
+                <th>Rol</th>
+                <th>Cargo/Dependencia</th>
+                <th>Estado</th>
+                <th>Último Acceso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.get_full_name }}</td>
+                <td>{{ usuario.numero_identificacion }}</td>
+                <td>{{ usuario.rol.nombre }}</td>
+                <td>{{ usuario.cargo_dependencia|default:"-" }}</td>
+                <td>
+                    <span style="color: {% if usuario.activo %}#4CAF50{% else %}#f44336{% endif %};">
+                        {% if usuario.activo %}Activo{% else %}Inactivo{% endif %}
+                    </span>
+                </td>
+                <td>{{ usuario.ultimo_acceso|date:"d/m/Y H:i"|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center;">No se encontraron usuarios</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if usuarios.has_other_pages %}
+    <div class="pagination">
+        {% if usuarios.has_previous %}
+            <a href="?page={{ usuarios.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Anterior</a>
+        {% endif %}
+        
+        <span class="active">{{ usuarios.number }} de {{ usuarios.paginator.num_pages }}</span>
+        
+        {% if usuarios.has_next %}
+            <a href="?page={{ usuarios.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Siguiente</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

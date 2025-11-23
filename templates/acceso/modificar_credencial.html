@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Modificar Credencial{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Modificar Credencial: {{ credencial.codigo }}</h2>
+    
+    <div style="background-color: #f5f5f5; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+        <p><strong>Usuario:</strong> {{ credencial.usuario.get_full_name }}</p>
+        <p><strong>Documento:</strong> {{ credencial.usuario.numero_identificacion }}</p>
+        <p><strong>Fecha de creación:</strong> {{ credencial.fecha_creacion|date:"d/m/Y H:i" }}</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_rol" class="required">Rol</label>
+            {{ form.rol }}
+            {% if form.rol.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.rol.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_estado" class="required">Estado</label>
+            {{ form.estado }}
+            {% if form.estado.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.estado.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{% url 'listar_credenciales' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

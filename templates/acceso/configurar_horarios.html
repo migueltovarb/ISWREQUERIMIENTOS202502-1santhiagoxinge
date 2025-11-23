@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Configurar Horarios{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Configuración de Horarios de Acceso</h2>
+    
+    <form method="post" style="margin-bottom: 30px;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_rol" class="required">Rol</label>
+            {{ form.rol }}
+            {% if form.rol.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.rol.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_dia_semana" class="required">Día de la semana</label>
+            {{ form.dia_semana }}
+            {% if form.dia_semana.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.dia_semana.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label for="id_hora_entrada" class="required">Hora de entrada</label>
+                {{ form.hora_entrada }}
+                {% if form.hora_entrada.errors %}
+                    <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.hora_entrada.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_hora_salida" class="required">Hora de salida</label>
+                {{ form.hora_salida }}
+                {% if form.hora_salida.errors %}
+                    <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.hora_salida.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if form.non_field_errors %}
+            <div style="color: #f44336; margin-bottom: 15px;">{{ form.non_field_errors }}</div>
+        {% endif %}
+        
+        <button type="submit" class="btn btn-primary">Guardar Horario</button>
+    </form>
+    
+    <h3 style="margin-top: 30px; margin-bottom: 15px;">Horarios Configurados</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rol</th>
+                <th>Día</th>
+                <th>Hora Entrada</th>
+                <th>Hora Salida</th>
+                <th>Última Modificación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for horario in horarios %}
+            <tr>
+                <td>{{ horario.rol.nombre }}</td>
+                <td>{{ horario.dia_semana }}</td>
+                <td>{{ horario.hora_entrada|time:"H:i" }}</td>
+                <td>{{ horario.hora_salida|time:"H:i" }}</td>
+                <td>{{ horario.fecha_modificacion|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center;">No hay horarios configurados</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Reportes{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Reportes de Acceso</h2>
+    
+    <form method="get" style="margin-bottom: 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div class="form-group">
+                <label>Fecha Inicio</label>
+                {{ form.fecha_inicio }}
+            </div>
+            <div class="form-group">
+                <label>Fecha Fin</label>
+                {{ form.fecha_fin }}
+            </div>
+            <div class="form-group">
+                <label>Rol</label>
+                {{ form.rol }}
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                {{ form.tipo }}
+            </div>
+            <div class="form-group">
+                <label>Estado</label>
+                {{ form.estado }}
+            </div>
+        </div>
+        <div style="margin-top: 15px;">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a href="{% url 'reportes' %}" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
+    
+    <div style="margin-bottom: 15px;">
+        <strong>Total de registros: {{ registros.paginator.count }}</strong>
+        <div style="float: right;">
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'exportar' %}{{ key }}={{ value }}&{% endif %}{% endfor %}exportar=pdf" class="btn btn-danger" style="padding: 8px 15px;">Exportar PDF</a>
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'exportar' %}{{ key }}={{ value }}&{% endif %}{% endfor %}exportar=excel" class="btn btn-success" style="padding: 8px 15px;">Exportar Excel</a>
+            <a href="?{% for key, value in request.GET.items %}{% if key != 'exportar' %}{{ key }}={{ value }}&{% endif %}{% endfor %}exportar=csv" class="btn btn-warning" style="padding: 8px 15px;">Exportar CSV</a>
+        </div>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha y Hora</th>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Rol</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Punto de Acceso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro.fecha_hora|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ registro.usuario.get_full_name|default:"N/A" }}</td>
+                <td>{{ registro.usuario.numero_identificacion|default:"N/A" }}</td>
+                <td>{{ registro.credencial.rol.nombre|default:"N/A" }}</td>
+                <td>{{ registro.tipo }}</td>
+                <td>
+                    <span style="color: {% if registro.estado == 'Permitido' %}#4CAF50{% else %}#f44336{% endif %};">
+                        {{ registro.estado }}
+                    </span>
+                </td>
+                <td>{{ registro.punto_acceso }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center;">No se encontraron registros con los filtros aplicados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if registros.has_other_pages %}
+    <div class="pagination">
+        {% if registros.has_previous %}
+            <a href="?page={{ registros.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Anterior</a>
+        {% endif %}
+        
+        <span class="active">{{ registros.number }} de {{ registros.paginator.num_pages }}</span>
+        
+        {% if registros.has_next %}
+            <a href="?page={{ registros.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Siguiente</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

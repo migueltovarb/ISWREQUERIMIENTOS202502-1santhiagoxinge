@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Configurar Vigencia{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Configurar Vigencia de Credenciales</h2>
+    
+    <form method="post" style="margin-bottom: 30px;">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_rol" class="required">Rol</label>
+            {{ form.rol }}
+            {% if form.rol.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.rol.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label for="id_vigencia_valor">Vigencia</label>
+                {{ form.vigencia_valor }}
+                {% if form.vigencia_valor.errors %}
+                    <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.vigencia_valor.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_vigencia_unidad" class="required">Unidad</label>
+                {{ form.vigencia_unidad }}
+                {% if form.vigencia_unidad.errors %}
+                    <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.vigencia_unidad.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+    </form>
+    
+    <h3 style="margin-top: 30px; margin-bottom: 15px;">Configuraciones Actuales</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rol</th>
+                <th>Vigencia</th>
+                <th>Última Modificación</th>
+                <th>Modificado por</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for config in configuraciones %}
+            <tr>
+                <td>{{ config.rol.nombre }}</td>
+                <td>
+                    {% if config.vigencia_horas %}
+                        {{ config.vigencia_horas }} horas
+                    {% elif config.vigencia_dias %}
+                        {{ config.vigencia_dias }} días
+                    {% else %}
+                        Indefinida
+                    {% endif %}
+                </td>
+                <td>{{ config.fecha_modificacion|date:"d/m/Y H:i" }}</td>
+                <td>{{ config.usuario_modificacion.get_full_name|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No hay configuraciones registradas</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+

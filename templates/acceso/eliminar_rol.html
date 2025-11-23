@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Rol{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Eliminar Rol</h2>
+    
+    <div style="background-color: #fff3cd; padding: 15px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #ff9800;">
+        <p><strong>¿Está seguro de que desea eliminar este rol?</strong></p>
+    </div>
+    
+    <div style="background-color: #f5f5f5; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+        <p><strong>Nombre:</strong> {{ rol.nombre }}</p>
+        <p><strong>Descripción:</strong> {{ rol.descripcion|default:"-" }}</p>
+        <p><strong>Nivel de acceso:</strong> {{ rol.nivel_acceso }}</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+            <a href="{% url 'gestionar_roles' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

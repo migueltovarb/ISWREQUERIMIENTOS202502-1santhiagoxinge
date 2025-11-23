@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Configuración del Sistema{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Configuración del Sistema</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_periodo_retencion_logs" class="required">Periodo de retención de logs (meses)</label>
+            {{ form.periodo_retencion_logs }}
+            <small style="color: #757575; font-size: 12px;">0 = indefinido</small>
+            {% if form.periodo_retencion_logs.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.periodo_retencion_logs.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_tiempo_inactividad_minutos" class="required">Tiempo de inactividad (minutos)</label>
+            {{ form.tiempo_inactividad_minutos }}
+            <small style="color: #757575; font-size: 12px;">Mínimo: 5, Máximo: 30</small>
+            {% if form.tiempo_inactividad_minutos.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.tiempo_inactividad_minutos.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_max_intentos_fallidos" class="required">Máximo de intentos fallidos</label>
+            {{ form.max_intentos_fallidos }}
+            {% if form.max_intentos_fallidos.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.max_intentos_fallidos.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_tiempo_bloqueo_minutos" class="required">Tiempo de bloqueo (minutos)</label>
+            {{ form.tiempo_bloqueo_minutos }}
+            {% if form.tiempo_bloqueo_minutos.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.tiempo_bloqueo_minutos.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

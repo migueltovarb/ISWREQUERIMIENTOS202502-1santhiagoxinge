@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Empleado{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Registrar Empleado o Personal Interno</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_first_name" class="required">Nombre</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.first_name.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_last_name" class="required">Apellido</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.last_name.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_tipo_identificacion" class="required">Tipo de identificación</label>
+            {{ form.tipo_identificacion }}
+            {% if form.tipo_identificacion.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.tipo_identificacion.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_numero_identificacion" class="required">Número de identificación</label>
+            {{ form.numero_identificacion }}
+            {% if form.numero_identificacion.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.numero_identificacion.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_contacto" class="required">Contacto (teléfono o correo)</label>
+            {{ form.contacto }}
+            {% if form.contacto.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.contacto.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_correo_institucional" class="required">Correo institucional</label>
+            {{ form.correo_institucional }}
+            <small style="color: #757575; font-size: 12px;">Formato: nombre.apellido@organizacion.com</small>
+            {% if form.correo_institucional.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.correo_institucional.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_cargo_dependencia" class="required">Cargo o dependencia</label>
+            {{ form.cargo_dependencia }}
+            {% if form.cargo_dependencia.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.cargo_dependencia.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_fotografia">Fotografía (opcional - JPG, PNG o GIF, máx. 5 MB)</label>
+            {{ form.fotografia }}
+            {% if form.fotografia.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.fotografia.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'listar_usuarios' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

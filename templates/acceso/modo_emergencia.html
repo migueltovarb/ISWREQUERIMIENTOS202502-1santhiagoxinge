@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Modo de Emergencia{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Modo de Emergencia</h2>
+    
+    {% if config.modo_emergencia %}
+    <div style="background-color: #f44336; color: white; padding: 20px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+        <h3 style="color: white; margin-bottom: 10px;">MODO DE EMERGENCIA ACTIVADO</h3>
+        <p>Fecha de activación: {{ config.fecha_activacion_emergencia|date:"d/m/Y H:i:s" }}</p>
+        <p>Activado por: {{ config.usuario_activacion_emergencia.get_full_name|default:"-" }}</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="accion" value="desactivar">
+        <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 18px;">
+            Desactivar Modo de Emergencia
+        </button>
+    </form>
+    {% else %}
+    <div style="background-color: #fff3cd; padding: 20px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #ff9800;">
+        <p><strong>Advertencia:</strong> Al activar el modo de emergencia, todas las puertas designadas se desbloquearán inmediatamente.</p>
+    </div>
+    
+    <form method="post" onsubmit="return confirm('¿Desea activar el modo de emergencia? Esta acción desbloqueará todas las puertas.');">
+        {% csrf_token %}
+        <input type="hidden" name="accion" value="activar">
+        <button type="submit" class="btn btn-danger" style="width: 100%; padding: 15px; font-size: 18px;">
+            Activar Modo de Emergencia
+        </button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

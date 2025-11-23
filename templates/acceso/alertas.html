@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Alertas{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Alertas de Seguridad</h2>
+    
+    <div style="margin-bottom: 20px;">
+        <a href="?estado=Nueva" class="btn {% if estado_actual == 'Nueva' %}btn-primary{% else %}btn-secondary{% endif %}" style="padding: 8px 15px;">Nuevas</a>
+        <a href="?estado=Revisada" class="btn {% if estado_actual == 'Revisada' %}btn-primary{% else %}btn-secondary{% endif %}" style="padding: 8px 15px;">Revisadas</a>
+        <a href="?estado=Resuelta" class="btn {% if estado_actual == 'Resuelta' %}btn-primary{% else %}btn-secondary{% endif %}" style="padding: 8px 15px;">Resueltas</a>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha y Hora</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Usuario</th>
+                <th>Punto de Acceso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alerta in alertas %}
+            <tr>
+                <td>{{ alerta.fecha_hora|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ alerta.tipo }}</td>
+                <td>{{ alerta.descripcion }}</td>
+                <td>{{ alerta.usuario_relacionado.get_full_name|default:"-" }}</td>
+                <td>{{ alerta.punto_acceso|default:"-" }}</td>
+                <td>
+                    <span style="color: {% if alerta.estado == 'Nueva' %}#f44336{% elif alerta.estado == 'Revisada' %}#ff9800{% else %}#4CAF50{% endif %};">
+                        {{ alerta.estado }}
+                    </span>
+                </td>
+                <td>
+                    {% if alerta.estado == 'Nueva' %}
+                        <a href="{% url 'marcar_alerta' alerta.id %}?accion=revisada" class="btn btn-warning" style="padding: 5px 10px; font-size: 12px;">Marcar Revisada</a>
+                        <a href="{% url 'marcar_alerta' alerta.id %}?accion=resuelta" class="btn btn-success" style="padding: 5px 10px; font-size: 12px;">Marcar Resuelta</a>
+                    {% elif alerta.estado == 'Revisada' %}
+                        <a href="{% url 'marcar_alerta' alerta.id %}?accion=resuelta" class="btn btn-success" style="padding: 5px 10px; font-size: 12px;">Marcar Resuelta</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center;">No hay alertas {{ estado_actual|lower }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if alertas.has_other_pages %}
+    <div class="pagination">
+        {% if alertas.has_previous %}
+            <a href="?page={{ alertas.previous_page_number }}&estado={{ estado_actual }}">Anterior</a>
+        {% endif %}
+        
+        <span class="active">{{ alertas.number }} de {{ alertas.paginator.num_pages }}</span>
+        
+        {% if alertas.has_next %}
+            <a href="?page={{ alertas.next_page_number }}&estado={{ estado_actual }}">Siguiente</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

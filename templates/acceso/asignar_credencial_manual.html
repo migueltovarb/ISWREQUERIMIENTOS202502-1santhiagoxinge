@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Asignar Credencial Manual{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Asignación Manual de Credencial</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_nombre_completo" class="required">Nombre completo</label>
+            {{ form.nombre_completo }}
+            {% if form.nombre_completo.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.nombre_completo.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_numero_identificacion" class="required">Número de identificación</label>
+            {{ form.numero_identificacion }}
+            {% if form.numero_identificacion.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.numero_identificacion.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_rol" class="required">Rol</label>
+            {{ form.rol }}
+            {% if form.rol.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.rol.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_codigo_credencial">Código de credencial (opcional - se generará automáticamente si se deja vacío)</label>
+            {{ form.codigo_credencial }}
+            <small style="color: #757575; font-size: 12px;">Entre 6 y 10 caracteres alfanuméricos</small>
+            {% if form.codigo_credencial.errors %}
+                <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.codigo_credencial.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label for="id_vigencia_valor" class="required">Vigencia</label>
+                {{ form.vigencia_valor }}
+                {% if form.vigencia_valor.errors %}
+                    <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.vigencia_valor.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="id_vigencia_unidad" class="required">Unidad</label>
+                {{ form.vigencia_unidad }}
+                {% if form.vigencia_unidad.errors %}
+                    <div style="color: #f44336; font-size: 12px; margin-top: 5px;">{{ form.vigencia_unidad.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a href="{% url 'listar_credenciales' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

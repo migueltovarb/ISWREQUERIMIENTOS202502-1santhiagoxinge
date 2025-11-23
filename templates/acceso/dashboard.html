@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel Principal{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total de Usuarios</h3>
+        <div class="value">{{ total_usuarios }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Credenciales Activas</h3>
+        <div class="value">{{ total_credenciales_activas }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Registros Hoy</h3>
+        <div class="value">{{ registros_hoy }}</div>
+    </div>
+    <div class="stat-card">
+        <h3>Alertas Nuevas</h3>
+        <div class="value">{{ alertas_nuevas }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Últimos Registros de Acceso</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha y Hora</th>
+                <th>Usuario</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Punto de Acceso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in ultimos_registros %}
+            <tr>
+                <td>{{ registro.fecha_hora|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ registro.usuario.get_full_name|default:"N/A" }}</td>
+                <td>{{ registro.tipo }}</td>
+                <td>
+                    <span style="color: {% if registro.estado == 'Permitido' %}#4CAF50{% else %}#f44336{% endif %};">
+                        {{ registro.estado }}
+                    </span>
+                </td>
+                <td>{{ registro.punto_acceso }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center;">No hay registros recientes</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if alertas_recientes %}
+<div class="card">
+    <h2>Alertas Recientes</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Fecha y Hora</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alerta in alertas_recientes %}
+            <tr>
+                <td>{{ alerta.tipo }}</td>
+                <td>{{ alerta.descripcion }}</td>
+                <td>{{ alerta.fecha_hora|date:"d/m/Y H:i:s" }}</td>
+                <td>{{ alerta.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'alertas' %}" class="btn btn-primary" style="margin-top: 15px;">Ver Todas las Alertas</a>
+</div>
+{% endif %}
+{% endblock %}
+
+
+
+
